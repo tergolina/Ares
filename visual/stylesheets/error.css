@@ -1,0 +1,14 @@
+#error-panel{
+  display: none;
+  width: 400px;
+  height: 100px;
+  top: calc(50% - 100px);
+  left: calc(50% - 200px);
+}
+
+#error-label{
+  position: absolute;
+  font-size: 20px;
+  left: 20px;
+  top: 55px;
+}

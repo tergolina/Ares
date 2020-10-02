@@ -1,0 +1,23 @@
+#notifications-menu{
+  display: none;
+  border: 0;
+  /* height: 100%; */
+  width: 300px;
+  left: calc(100% - 350px - 300px);
+}
+
+
+#notifications-button{
+  top: 10px;
+  left: 10px;
+  height: 32px;
+  width: 32px;
+  background:url("icons/notifications_black.png") no-repeat;
+  background-size: 28px;
+  border: none;
+}
+#notifications-button:hover{
+  background:url("icons/notifications_white.png") no-repeat;
+  background-size: 28px;
+  border: none;
+}

@@ -1,0 +1,53 @@
+#character-create-menu{
+  display: none;
+  position: absolute;
+  z-index: 1;
+  top: calc(50% - 90px);
+  left: calc(50% - 175px);
+  height: 170px;
+  width: 350px;
+}
+
+#character-create-button{
+  font-size: 22px;
+  position: absolute;
+  height: 40px;
+  width: 150px;
+  left: calc(50% - 75px);
+  top: calc(100% - 55px);
+}
+
+#character-create-name-input{
+  top: 60px;
+  height: 20px;
+}
+
+
+
+#my-character-panel{
+  border: 0;
+  top: 0;
+  height: 370px;
+  width: 100%;
+}
+
+#my-character-name-panel{
+  position: absolute;
+  width: 100%;
+  top: 320px;
+  text-align: center;
+}
+
+#my-character-name-label{
+  font-size: 30px;
+}
+
+
+
+#my-character-icon-canvas{
+  display: block;
+  top: 50px;
+  left: calc(50% - 125px);
+  width: 250px;
+  height: 250px;
+}

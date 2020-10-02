@@ -1,0 +1,46 @@
+#rematch-menu{
+  display: none;
+  z-index: 1;
+  top: calc(50% - 220px);
+  left: calc(50% - 190px);
+  height: 220px;
+  width: 380px;
+}
+
+#rematch-label{
+  text-align:center;
+  position: absolute;
+  font-size: 80px;
+  width: 100%;
+  top: 15px;
+}
+
+#rematch-accept-button{
+  font-size: 22px;
+  position: absolute;
+  top: 130px;
+  height: 40px;
+  width: 200px;
+  left: 60px;
+  outline: none;
+}
+
+#rematch-refuse-button{
+  font-size: 22px;
+  position: absolute;
+  top: 130px;
+  height: 40px;
+  width: 40px;
+  left: 280px;
+  outline: none;
+}
+
+#rematch-progress-bar{
+  position: absolute;
+  background-color: #FFF;
+  border: 2px solid #000;
+  top: 180px;
+  left: 60px;
+  width: 260px;
+  height: 20px;
+}

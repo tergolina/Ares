@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Battle</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <link href="/visual/stylesheets/base.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/duel.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/mainmenu.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/match.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/rematch.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/replay.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/spectate.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/lobby.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/friends.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/character.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/notifications.css" rel="stylesheet"/>
+    <link href="/visual/stylesheets/error.css" rel="stylesheet"/>
+  </head>
+  <body bgcolor="#0">
+    <canvas id="match-canvas" width="1900" height="850"></canvas>
+
+    <div id="main-menu">
+      <div id="spectate-menu">
+        <canvas id="spectate-canvas" width="1900" height="850"></canvas>
+
+        <div class="default-form" id="wait-spectate-menu">
+          <label class="title-label" id="wait-spectate-label">Waiting for match data</label>
+          <div class="progress-line" id="wait-spectate-progress-bar"></div>
+        </div>
+
+        <div class="default-form" id="custom-spectate-menu">
+          <label class="title-label" id="custom-spectate-label">Spectate request</label>
+          <input class="player-id-input" id="spectate-playerid-input" maxlength="100" placeholder="Player id"></input>
+          <button id="request-spectate-button">Spectate</button>
+        </div>
+
+        <div class="default-form" id="spectate-history-menu">
+          <label class="title-label" id="spectate-history-label">Spectate history</label>
+          <div class="default-form" id="spectate-history-form"></div>
+        </div>
+
+        <button id="spectate-scoreboard-button">Scoreboard</button>
+      </div>
+
+
+      <div id="replay-menu">
+        <canvas id="replay-canvas" width="1900" height="850"></canvas>
+
+        <div id="replay-control-panel">
+          <button id="play-pause-button"> > </button>
+
+          <button id="advance-frame-button"> >> </button>
+          <button id="advance-index-button"> >I </button>
+
+          <button id="rollback-frame-button"> << </button>
+          <button id="rollback-index-button"> I< </button>
+
+          <button id="advance-10-frames-button"> >>> </button>
+          <button id="rollback-10-frames-button"> <<< </button>
+
+          <button id="reset-replay-button"> R </button>
+          <select id="replay-speed">
+            <option value=1>1x</option>
+            <option value=0.1>0.1x</option>
+            <option value=0.25>0.25x</option>
+            <option value=0.5>0.5x</option>
+            <option value=0.75>0.75x</option>
+            <option value=2>2x</option>
+            <option value=3>3x</option>
+          </select>
+        </div>
+
+        <div id="input-history-display">
+        </div>
+      </div>
+
+
+      <div id="challenge-menu">
+        <div id="upper-panel-row">
+          <div class="main-menu-selection-panel" id="queue-panel">
+            <div class="title-subpanel">
+              <label class="panel-title-label" id="queue-panel-title">Solo Queue</label>
+            </div>
+            <button class="challenge-panel-button" id="join-queue-panel-button">Join</button>
+          </div>
+
+          <div class="main-menu-selection-panel" id="custom-lobby-panel">
+            <div class="title-subpanel">
+              <label class="panel-title-label" id="custom-lobby-panel-title">Custom Lobby</label>
+            </div>
+            <button class="challenge-panel-button" id="custom-lobby-panel-button">Create</button>
+          </div>
+
+          <div class="main-menu-selection-panel" id="replay-panel">
+            <div class="title-subpanel">
+              <label class="panel-title-label" id="replay-panel-title-label">Replay</label>
+            </div>
+            <button class="challenge-panel-button" id="replay-panel-button">Watch</button>
+          </div>
+
+          <div class="main-menu-selection-panel" id="spectate-panel">
+            <div class="title-subpanel">
+              <label class="panel-title-label" id="spectate-panel-title-label">Spectate</label>
+            </div>
+            <button class="challenge-panel-button" id="spectate-panel-button">Watch</button>
+          </div>
+        </div>
+        <div id="lower-panel-row">
+        </div>
+
+
+        <div id="lobby-options-menu">
+          <div class="default-form" id="lobby-parameters-panel">
+            <label class="title-label" id="lobby-parameter-name-label">My Lobby</label>
+            <hr class="title-hr">
+            <input id="lobby-parameter-name-input" maxlength="100"></input>
+            <button id="lobby-parameter-edit-name-button"></button>
+
+            <label class="lobby-parameter-label" id="lobby-parameter-rounds-per-match-label">Rounds per match</label>
+            <select class="lobby-parameter-select" id="lobby-parameter-rounds-per-match-select">
+              <option value="1">1</option>
+              <option value="3">3</option>
+              <option value="5">5</option>
+              <option value="7">7</option>
+            </select>
+
+            <label class="lobby-parameter-label" id="lobby-parameter-win-condition-label">Win condition</label>
+            <select class="lobby-parameter-select" id="lobby-parameter-win-condition-select">
+              <option value="score">Score</option>
+              <option value="wins">Wins</option>
+              <option value="matches">Matches</option>
+            </select>
+            <select class="lobby-parameter-select" id="lobby-parameter-win-condition-number-select">
+              <option value="4">4</option>
+              <option value="8">8</option>
+              <option value="16">16</option>
+              <option value="32">32</option>
+            </select>
+
+            <label class="lobby-parameter-label" id="lobby-parameter-streak-limit-label">Streak limit</label>
+            <select class="lobby-parameter-select" id="lobby-parameter-streak-limit-select">
+              <option value="none">None</option>
+              <option value="roundtrip">Roundtrip</option>
+              <option value="win">Wins</option>
+            </select>
+            <select class="lobby-parameter-select" id="lobby-parameter-streak-limit-number-select">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="5">5</option>
+              <option value="7">7</option>
+            </select>
+
+            <button id="lobby-start-button">Start</button>
+          </div>
+
+          <div class="default-form" id="lobby-open-invite-panel">
+            <label class="title-label">Open invite link</label>
+            <input class="link-input" id="lobby-invite-link-input" readonly></input>
+            <button class="copy-button" id="lobby-copy-invite-link-button" type="submit"></button>
+            <button class="whatsapp-button" id="lobby-whatsapp-invite-button" type="submit"></button>
+          </div>
+
+          <div class="lobby-player-slot default-form" id="lobby-player-slot-1">
+            <div class="leader-crown" id="leader-crown-1"></div>
+            <div class="lobby-player-slot-name-panel" id="lobby-player-slot-name-panel-1">
+              <label class="lobby-player-slot-name-label" id="lobby-player-slot-name-label-1">Player Name 1</label>
+            </div>
+
+            <button class="lobby-player-slot-options-button" id="lobby-player-slot-options-button-1"></button>
+            <div class="options-menu default-form hideable" id="lobby-player-slot-options-menu-1">
+              <button class="options-inner-button" id="lobby-player-slot-add-friend-button-1">Add Friend</button>
+              <button class="options-inner-button" id="lobby-player-slot-remove-button-1">Remove</button>
+            </div>
+
+            <button class="lobby-add-player-button" id="lobby-add-player-button-1">+</button>
+          </div>
+          <div class="lobby-player-slot default-form" id="lobby-player-slot-2">
+            <div class="leader-crown" id="leader-crown-2"></div>
+            <div class="lobby-player-slot-name-panel" id="lobby-player-slot-name-panel-2">
+              <label class="lobby-player-slot-name-label" id="lobby-player-slot-name-label-2">Player Name 2</label>
+            </div>
+            <button class="lobby-player-slot-options-button" id="lobby-player-slot-options-button-2"></button>
+            <div class="options-menu default-form hideable" id="lobby-player-slot-options-menu-2">
+              <button class="options-inner-button" id="lobby-player-slot-add-friend-button-2">Add Friend</button>
+              <button class="options-inner-button" id="lobby-player-slot-remove-button-2">Remove</button>
+            </div>
+
+            <button class="lobby-add-player-button" id="lobby-add-player-button-2">+</button>
+          </div>
+          <div class="lobby-player-slot default-form" id="lobby-player-slot-3">
+            <div class="leader-crown" id="leader-crown-3"></div>
+            <div class="lobby-player-slot-name-panel" id="lobby-player-slot-name-panel-3">
+              <label class="lobby-player-slot-name-label" id="lobby-player-slot-name-label-3">Player Name 3</label>
+            </div>
+            <button class="lobby-player-slot-options-button" id="lobby-player-slot-options-button-3"></button>
+            <div class="options-menu default-form hideable" id="lobby-player-slot-options-menu-3">
+              <button class="options-inner-button" id="lobby-player-slot-add-friend-button-3">Add Friend</button>
+              <button class="options-inner-button" id="lobby-player-slot-remove-button-3">Remove</button>
+            </div>
+
+            <button class="lobby-add-player-button" id="lobby-add-player-button-3">+</button>
+          </div>
+          <div class="lobby-player-slot default-form" id="lobby-player-slot-4">
+            <div class="leader-crown" id="leader-crown-4"></div>
+            <div class="lobby-player-slot-name-panel" id="lobby-player-slot-name-panel-4">
+              <label class="lobby-player-slot-name-label" id="lobby-player-slot-name-label-4">Player Name 4</label>
+            </div>
+            <button class="lobby-player-slot-options-button" id="lobby-player-slot-options-button-4"></button>
+            <div class="options-menu default-form hideable" id="lobby-player-slot-options-menu-4">
+              <button class="options-inner-button" id="lobby-player-slot-add-friend-button-4">Add Friend</button>
+              <button class="options-inner-button" id="lobby-player-slot-remove-button-4">Remove</button>
+            </div>
+
+            <button class="lobby-add-player-button" id="lobby-add-player-button-4">+</button>
+          </div>
+          <div class="lobby-player-slot default-form" id="lobby-player-slot-5">
+            <div class="leader-crown" id="leader-crown-5"></div>
+            <div class="lobby-player-slot-name-panel" id="lobby-player-slot-name-panel-5">
+              <label class="lobby-player-slot-name-label" id="lobby-player-slot-name-label-5">Player Name 5</label>
+            </div>
+            <button class="lobby-player-slot-options-button" id="lobby-player-slot-options-button-5"></button>
+            <div class="options-menu default-form hideable" id="lobby-player-slot-options-menu-5">
+              <button class="options-inner-button" id="lobby-player-slot-add-friend-button-5">Add Friend</button>
+              <button class="options-inner-button" id="lobby-player-slot-remove-button-5">Remove</button>
+            </div>
+
+            <button class="lobby-add-player-button" id="lobby-add-player-button-5">+</button>
+          </div>
+          <div class="lobby-player-slot default-form" id="lobby-player-slot-6">
+            <div class="leader-crown" id="leader-crown-6"></div>
+            <div class="lobby-player-slot-name-panel" id="lobby-player-slot-name-panel-6">
+              <label class="lobby-player-slot-name-label" id="lobby-player-slot-name-label-6">Player Name 6</label>
+            </div>
+            <button class="lobby-player-slot-options-button" id="lobby-player-slot-options-button-6"></button>
+            <div class="options-menu default-form hideable" id="lobby-player-slot-options-menu-6">
+              <button class="options-inner-button" id="lobby-player-slot-add-friend-button-6">Add Friend</button>
+              <button class="options-inner-button" id="lobby-player-slot-remove-button-6">Remove</button>
+            </div>
+
+            <button class="lobby-add-player-button" id="lobby-add-player-button-6">+</button>
+          </div>
+          <div class="lobby-player-slot default-form" id="lobby-player-slot-7">
+            <div class="leader-crown" id="leader-crown-7"></div>
+            <div class="lobby-player-slot-name-panel" id="lobby-player-slot-name-panel-7">
+              <label class="lobby-player-slot-name-label" id="lobby-player-slot-name-label-7">Player Name 7</label>
+            </div>
+            <button class="lobby-player-slot-options-button" id="lobby-player-slot-options-button-7"></button>
+            <div class="options-menu default-form hideable" id="lobby-player-slot-options-menu-7">
+              <button class="options-inner-button" id="lobby-player-slot-add-friend-button-7">Add Friend</button>
+              <button class="options-inner-button" id="lobby-player-slot-remove-button-7">Remove</button>
+            </div>
+
+            <button class="lobby-add-player-button" id="lobby-add-player-button-7">+</button>
+          </div>
+          <div class="lobby-player-slot default-form" id="lobby-player-slot-8">
+            <div class="leader-crown" id="leader-crown-8"></div>
+            <div class="lobby-player-slot-name-panel" id="lobby-player-slot-name-panel-8">
+              <label class="lobby-player-slot-name-label" id="lobby-player-slot-name-label-8">Player Name 8</label>
+            </div>
+            <button class="lobby-player-slot-options-button" id="lobby-player-slot-options-button-8"></button>
+            <div class="options-menu default-form hideable" id="lobby-player-slot-options-menu-8">
+              <button class="options-inner-button" id="lobby-player-slot-add-friend-button-8">Add Friend</button>
+              <button class="options-inner-button" id="lobby-player-slot-remove-button-8">Remove</button>
+            </div>
+
+            <button class="lobby-add-player-button" id="lobby-add-player-button-8">+</button>
+          </div>
+
+          <div class="default-form hideable" id="lobby-add-player-panel">
+            <label class="title-label">Invite player to Lobby</label>
+            <input class="player-id-input" id="lobby-add-player-id-input" maxlength="100" placeholder="Player id"></input>
+            <button id="lobby-add-player-invite-button">Invite</button>
+          </div>
+        </div>
+
+        <div id="queue-options-menu">
+
+        </div>
+
+      </div>
+
+
+
+      <div id="match-history-menu">
+        <div id="drop-area">
+          <label id="drop-label">Drag and drop match file</label>
+          <input type="file" id="match-file-input" multiple accept=".txt">
+          <button id="choose-file-button" for="fileElem">Select file</button>
+        </div>
+      </div>
+
+
+      <div class="default-form" id="wait-acceptance-menu">
+        <label class="title-label" id="wait-acceptance-label">Waiting for opponent to accept the challenge</label>
+        <button id="resend-challenge-button">Resend Challenge</button>
+        <progress id="wait-acceptance-progress-bar" max="100" value="70"></progress>
+      </div>
+
+      <div class="default-form" id="side-menu">
+        <div class="default-form" id="my-character-panel">
+          <button id="notifications-button"></button>
+
+          <canvas id="my-character-icon-canvas"></canvas>
+
+          <div id="my-character-name-panel">
+            <label id="my-character-name-label">Michel Temer</label>
+          </div>
+          <!-- <hr class="under-hr"></hr> -->
+        </div>
+
+        <div id="link-select-button-panel">
+          <button class="tab-button" id="friend-link-select-button">Friend</button>
+          <button class="tab-button" id="duel-link-select-button">Duel</button>
+          <button class="tab-button" id="spectate-link-select-button">Spectate</button>
+        </div>
+
+        <div class="default-form" id="open-challenge-menu">
+          <label class="title-label" id="open-link-title">Duel link</label>
+          <input class="link-input" id="open-invite-link-input" readonly></input>
+          <button class="copy-button" id="copy-open-invite-link-button" type="submit"></button>
+          <button class="whatsapp-button" id="whatsapp-open-invite-link-button" type="submit"></button>
+          <hr class="under-hr"></hr>
+        </div>
+
+        <div class="default-form" id="friends-menu">
+        </div>
+      </div>
+
+      <div class="default-form" id="notifications-menu">
+      </div>
+
+      <div class="options-menu default-form hideable" id="friend-options-menu">
+        <button class="options-inner-button" id="friend-options-details-button">Details</button>
+        <button class="options-inner-button" id="friend-options-spectate-button">Spectate</button>
+        <button class="options-inner-button" id="friend-options-duel-button">Duel</button>
+        <button class="options-inner-button" id="friend-options-join-button">Join</button>
+        <button class="options-inner-button" id="friend-options-invite-button">Invite</button>
+        <button class="options-inner-button" id="friend-options-remove-button">Remove Friend</button>
+      </div>
+
+    </div>
+
+
+    <div class="default-form" id="lobby-scoreboard">
+      <label class="title-label">Scoreboard</label>
+      <hr class="title-hr"></hr>
+      <div class="scoreboard-player-panel" id="scoreboard-player-panel-1">
+        <label class="scoreboard-score-label" id="scoreboard-score-label-1">0</label>
+        <label class="scoreboard-name-label" id="scoreboard-name-label-1">Name</label>
+        <button class="transparent-button"></button>
+      </div>
+      <div class="scoreboard-player-panel" id="scoreboard-player-panel-2">
+        <label class="scoreboard-score-label" id="scoreboard-score-label-2">0</label>
+        <label class="scoreboard-name-label" id="scoreboard-name-label-2">Name</label>
+        <button class="transparent-button"></button>
+      </div>
+      <div class="scoreboard-player-panel" id="scoreboard-player-panel-3">
+        <label class="scoreboard-score-label" id="scoreboard-score-label-3">0</label>
+        <label class="scoreboard-name-label" id="scoreboard-name-label-3">Name</label>
+        <button class="transparent-button"></button>
+      </div>
+      <div class="scoreboard-player-panel" id="scoreboard-player-panel-4">
+        <label class="scoreboard-score-label" id="scoreboard-score-label-4">0</label>
+        <label class="scoreboard-name-label" id="scoreboard-name-label-4">Name</label>
+        <button class="transparent-button"></button>
+      </div>
+      <div class="scoreboard-player-panel" id="scoreboard-player-panel-5">
+        <label class="scoreboard-score-label" id="scoreboard-score-label-5">0</label>
+        <label class="scoreboard-name-label" id="scoreboard-name-label-5">Name</label>
+        <button class="transparent-button"></button>
+      </div>
+      <div class="scoreboard-player-panel" id="scoreboard-player-panel-6">
+        <label class="scoreboard-score-label" id="scoreboard-score-label-6">0</label>
+        <label class="scoreboard-name-label" id="scoreboard-name-label-6">Name</label>
+        <button class="transparent-button"></button>
+      </div>
+      <div class="scoreboard-player-panel" id="scoreboard-player-panel-7">
+        <label class="scoreboard-score-label" id="scoreboard-score-label-7">0</label>
+        <label class="scoreboard-name-label" id="scoreboard-name-label-7">Name</label>
+        <button class="transparent-button"></button>
+      </div>
+      <div class="scoreboard-player-panel" id="scoreboard-player-panel-8">
+        <label class="scoreboard-score-label" id="scoreboard-score-label-8">0</label>
+        <label class="scoreboard-name-label" id="scoreboard-name-label-8">Name</label>
+        <button class="transparent-button"></button>
+      </div>
+    </div>
+
+    <div class="default-form" id="rematch-menu">
+      <label id="rematch-label"></label>
+      <button id="rematch-accept-button">Rematch</button>
+      <button id="rematch-refuse-button">X</button>
+      <progress id="rematch-progress-bar" max="100" value="70"></progress>
+    </div>
+
+    <div class="accept-menu default-form hideable" id="duel-accept-menu">
+      <label class="title-label" id="duel-accept-label">A Player requested a Duel</label>
+      <button class="accept-button" id="duel-accept-button">Accept</button>
+      <button class="refuse-button" id="duel-refuse-button">Refuse</button>
+      <progress id="duel-accept-progress-bar" max="100" value="70"></progress>
+    </div>
+
+    <div class="accept-menu default-form hideable" id="lobby-accept-menu">
+      <label class="title-label" id="lobby-accept-label">Lobby invite</label>
+      <button class="accept-button" id="lobby-accept-button">Accept</button>
+      <button class="refuse-button" id="lobby-refuse-button">Refuse</button>
+    </div>
+
+    <div class="default-form" id="character-create-menu">
+      <label class="title-label">Choose a name</label>
+      <input class="player-id-input" id="character-create-name-input" maxlength="100"></input>
+      <button id="character-create-button">Confirm</button>
+    </div>
+
+    <div class="default-form" id="error-panel">
+      <label class="title-label">Error</label>
+      <label id="error-label">This is the error message</label>
+    </div>
+
+
+
+    <script src="/utils.js"></script>
+    <script src="/lock.js"></script>
+    <script src="/parameters/config.js"></script>
+    <script src="/parameters/actions.js"></script>
+    <script src="/parameters/objects.js"></script>
+    <script src="/menus/elements.js"></script>
+    <script src="/menus/rematch.js"></script>
+    <script src="/menus/duel.js"></script>
+    <script src="/menus/lobby.js"></script>
+    <script src="/menus/queue.js"></script>
+    <script src="/menus/notifications.js"></script>
+    <script src="/menus/friends.js"></script>
+    <script src="/menus/spectate.js"></script>
+    <script src="/connectivity/sync.js"></script>
+    <script src="/connectivity/user.js"></script>
+    <script src="/connectivity/connection.js"></script>
+    <script src="/visual/graphic.js"></script>
+    <script src="/collision.js"></script>
+    <script src="/movement.js"></script>
+    <script src="/input.js"></script>
+    <script src="/state.js"></script>
+    <script src="/match.js"></script>
+    <script src="/simulation.js"></script>
+    <script src="/replay.js"></script>
+    <script src="/debug.js"></script>
+    <script src="/client.js"></script>
+  </body>
+</html>

@@ -1,0 +1,248 @@
+#lobby-options-menu{
+  display: none;
+}
+
+#lobby-parameters-panel{
+  display: block;
+  top: 100px;
+  left: 140px;
+  height: 400px;
+  width: 350px;
+}
+
+#lobby-parameter-name-label{
+
+}
+
+
+#lobby-parameter-name-input{
+  display: none;
+}
+
+
+#lobby-parameter-edit-name-button{
+  background:url("icons/edit_black.png") no-repeat;
+  border: 0;
+  background-size: 27px;
+  top: 15px;
+  left: calc(100% - 30px - 15px);
+  height: 30px;
+  width: 30px;
+}
+#lobby-parameter-edit-name-button:hover{
+  border: 0;
+  background:url("icons/edit_white.png") no-repeat;
+  background-size: 27px;
+}
+
+
+.lobby-parameter-label{
+  position: absolute;
+  font-size: 20px;
+  left: 20px;
+}
+
+.lobby-parameter-select{
+  position: absolute;
+  font-size: 16px;
+  left: 20px;
+}
+
+#lobby-parameter-rounds-per-match-label{
+  top: 80px;
+}
+#lobby-parameter-rounds-per-match-select{
+  top: 110px;
+}
+
+#lobby-parameter-win-condition-label{
+  top: 150px;
+}
+#lobby-parameter-win-condition-select{
+  top: 180px;
+}
+#lobby-parameter-win-condition-number-select{
+  top: 180px;
+  left: 120px;
+}
+
+#lobby-parameter-streak-limit-label{
+  top: 220px;
+}
+#lobby-parameter-streak-limit-select{
+  top: 250px;
+}
+#lobby-parameter-streak-limit-number-select{
+  display: none;
+  top: 250px;
+  left: 125px;
+}
+
+#lobby-start-button{
+  top: 335px;
+  left: calc(50% - 60px);
+  height: 45px;
+  width: 120px;
+  font-size: 28px;
+}
+
+
+.lobby-player-slot{
+  display: block;
+  height: 320px;
+  width: 220px;
+}
+
+#lobby-player-slot-1{
+  top: 100px;
+  left: 550px;
+}
+
+#lobby-player-slot-2{
+  top: 100px;
+  left: 790px;
+}
+
+#lobby-player-slot-3{
+  top: 100px;
+  left: 1030px;
+}
+
+#lobby-player-slot-4{
+  top: 100px;
+  left: 1270px;
+}
+
+#lobby-player-slot-5{
+  top: 440px;
+  left: 550px;
+}
+
+#lobby-player-slot-6{
+  top: 440px;
+  left: 790px;
+}
+
+#lobby-player-slot-7{
+  top: 440px;
+  left: 1030px;
+}
+
+#lobby-player-slot-8{
+  top: 440px;
+  left: 1270px;
+}
+
+.lobby-add-player-button{
+  height: 100%;
+  width: 100%;
+  font-size: 38px;
+  border: 2px solid var(--button-border);
+}
+.lobby-add-player-button:hover{
+  font-size: 40px;
+}
+
+.lobby-player-slot-name-panel{
+  position: absolute;
+  width: 100%;
+  top: 250px;
+  text-align: center;
+}
+
+.lobby-player-slot-options-button{
+  top: 7px;
+  left: calc(100% - 37px);
+  border: 0;
+  background:url("icons/options_black.png") no-repeat;
+  background-size: 30px;
+  width: 30px;
+  height: 20px;
+}
+.lobby-player-slot-options-button:hover{
+  border: 0;
+  background:url("icons/options_white.png") no-repeat;
+  background-size: 30px;
+}
+
+
+.lobby-player-slot-name-label{
+  font-size: 24px;
+}
+
+
+#lobby-add-player-panel{
+  display: none;
+  top: 300px;
+  left: calc(50% - 175px);
+  width: 350px;
+  height: 190px;
+}
+
+#lobby-add-player-close-button{
+  position: absolute;
+  top: 8px;
+  font-size: 16px;
+  left: calc(100% - 32px);
+}
+
+#lobby-add-player-invite-button{
+  position: absolute;
+  width: 140px;
+  height: 45px;
+  font-size: 24px;
+  left: calc(50% - 70px);
+  top: 125px;
+}
+
+#lobby-open-invite-panel{
+  display: block;
+  top: 530px;
+  left: 140px;
+  height: 160px;
+  width: 350px;
+}
+
+
+
+
+#lobby-scoreboard{
+  display: none;
+  width: 400px;
+  height: 459px;
+  top: calc(50% - 250px);
+  left: calc(50% - 200px);
+}
+
+.scoreboard-player-panel{
+  position: relative;
+  top: 59px;
+  width: 100%;
+  height: 50px;
+}
+
+.scoreboard-score-label{
+  position: absolute;
+  top: 10px;
+  left: 30px;
+  font-size: 26px;
+}
+
+.scoreboard-name-label{
+  position: absolute;
+  top: 10px;
+  left: 75px;
+  font-size: 26px;
+}
+
+
+.leader-crown{
+  position: absolute;
+  top: 10px;
+  background: url("icons/crown_black.png");
+  background-size: 30px;
+  width: 30px;
+  height: 25px;
+  left: calc(50% - 15px);
+  outline: none;
+}

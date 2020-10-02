@@ -1,0 +1,110 @@
+#challenge-menu{
+  display: none;
+}
+
+
+
+#duel-options-menu{
+  display: none;
+}
+
+#queue-options-menu{
+  display: none;
+}
+
+
+
+
+
+
+
+
+
+.accept-menu{
+  display: none;
+  z-index: 1;
+  top: calc(50% - 130px);
+  left: calc(50% - 175px);
+  height: 160px;
+  width: 350px;
+}
+
+
+.accept-button{
+  font-size: 22px;
+  top: calc(100% - 55px);
+  height: 40px;
+  width: 140px;
+  left: 19px;
+}
+
+.refuse-button{
+  font-size: 22px;
+  top: calc(100% - 55px);
+  height: 40px;
+  width: 140px;
+  left: calc(100% - 140px - 19px);
+}
+
+#duel-accept-progress-bar{
+  position: absolute;
+  background-color: #FFF;
+  border: 2px solid #000;
+  top: 65px;
+  left: 20px;
+  width: calc(100% - 40px);
+  height: 20px;
+}
+
+
+
+
+
+
+
+
+#wait-acceptance-menu{
+  display: none;
+  top: calc(50% - 130px);
+  left: calc(50% - 200px);
+  height: 160px;
+  width: 400px;
+}
+
+#resend-challenge-button{
+  font-size: 20px;
+  display: none;
+  position: absolute;
+  top: 100px;
+  height: 40px;
+  width: 200px;
+  left: 20px;
+  outline: none;
+}
+
+#wait-acceptance-progress-bar{
+  position: absolute;
+  left: 20px;
+  top: 110px;
+  width: 360px;
+  height: 20px;
+}
+
+
+
+
+.challenge-panel-button{
+  display: block;
+  position: absolute;
+  background: transparent;
+  border: none !important;
+  position: absolute;
+  font-size: 28px;
+  margin-top: -68px;
+  height: 100%;
+  width: 100%;
+}
+.challenge-panel-button:hover {
+  font-size: 30px;
+  mix-blend-mode: difference;
+}
